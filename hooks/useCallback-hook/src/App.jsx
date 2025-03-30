@@ -1,35 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useCallback, memo } from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
+// 1. Componente hijo MEMOIZADO (sensible a props)
+const Boton = memo(function Boton({ onClick, children }) {
+  console.log('Renderizando Boton'); // Solo se imprime cuando cambia su prop onClick
+  return <button onClick={onClick}>{children}</button>;
+});
+
+export default function App() {
+  const [count, setCount] = useState(0);
+  const [inputValue, setInputValue] = useState('');
+
+  // 2. useCallback para memoizar función (evita recreación en cada render)
+  const incrementar = useCallback(() => {
+    setCount(c => c + 1);
+  }, []); // ✅ Dependencias vacías = misma función siempre
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div>
+      <p>Contador: {count}</p>
+      <input 
+        value={inputValue} 
+        onChange={(e) => setInputValue(e.target.value)} 
+        placeholder="Escribe algo..."
+      />
+      {/* 3. Boton no se rerenderiza al cambiar inputValue (gracias a useCallback + memo) */}
+      <Boton onClick={incrementar}>Incrementar</Boton>
+    </div>
+  );
 }
-
-export default App
