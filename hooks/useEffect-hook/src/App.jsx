@@ -1,35 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react';
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [contador, setContador] = useState(0);
+
+  useEffect(() => {
+    // esto es lo que se ejecuta cada vez que el elemento se actualiza
+    if (contador === 3) {
+      alert("¡El contador llegó a 3!");
+    }
+  }, [contador]); //en este array se colocan los elementos que va a 'observar'
+      // Se ejecuta cada vez que "contador" cambia
+
+  const incrementar = () => {
+    setContador(contador + 1);
+  };
+
+  const reiniciar = () => {
+    setContador(0);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div style={{ textAlign: 'center', marginTop: '20px' }}>
+      <h2>Contador: {contador}</h2>
+      <button onClick={incrementar}>Sumar +1</button>
+      <button onClick={reiniciar} style={{ marginLeft: '10px' }}>Reiniciar</button>
+    </div>
+  );
 }
 
 export default App
